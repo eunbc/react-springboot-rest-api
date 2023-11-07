@@ -1,4 +1,4 @@
-package com.ebcho.marketkurly.controller.dto;
+package com.ebcho.marketkurly.controller.dto.product;
 
 import com.ebcho.marketkurly.model.Category;
 

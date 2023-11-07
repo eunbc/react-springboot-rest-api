@@ -12,18 +12,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ebcho.marketkurly.controller.dto.CreateProductRequest;
-import com.ebcho.marketkurly.controller.dto.ProductResponseDto;
-import com.ebcho.marketkurly.controller.dto.UpdateProductRequest;
-import com.ebcho.marketkurly.model.Category;
+import com.ebcho.marketkurly.controller.dto.product.CreateProductRequest;
+import com.ebcho.marketkurly.controller.dto.product.ProductResponse;
+import com.ebcho.marketkurly.controller.dto.product.UpdateProductRequest;
 import com.ebcho.marketkurly.service.ProductService;
 
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductRestController {
+
 	private final ProductService productService;
 
 	public ProductRestController(ProductService productService) {
@@ -31,27 +30,27 @@ public class ProductRestController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ProductResponseDto> createProduct(@RequestBody CreateProductRequest request) {
-		ProductResponseDto createdProduct = productService.createProduct(request);
+	public ResponseEntity<ProductResponse> createProduct(@RequestBody CreateProductRequest request) {
+		ProductResponse createdProduct = productService.createProduct(request);
 		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED); // todo: Add 'Location' header
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
-		List<ProductResponseDto> products = productService.getAllProducts();
+	public ResponseEntity<List<ProductResponse>> getAllProducts() { // todo : 검색
+		List<ProductResponse> products = productService.getAllProducts();
 		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductResponseDto> getProductById(@PathVariable UUID id) {
-		ProductResponseDto product = productService.getProductById(id);
+	public ResponseEntity<ProductResponse> getProductById(@PathVariable UUID id) {
+		ProductResponse product = productService.getProductById(id);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable UUID id,
+	public ResponseEntity<ProductResponse> updateProduct(@PathVariable UUID id,
 		@RequestBody UpdateProductRequest request) {
-		ProductResponseDto updatedProduct = productService.updateProduct(id, request);
+		ProductResponse updatedProduct = productService.updateProduct(id, request);
 		return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
 	}
 

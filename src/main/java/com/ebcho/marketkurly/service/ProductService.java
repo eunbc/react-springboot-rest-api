@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.ebcho.marketkurly.controller.dto.CreateProductRequest;
-import com.ebcho.marketkurly.controller.dto.ProductResponseDto;
-import com.ebcho.marketkurly.controller.dto.UpdateProductRequest;
+import com.ebcho.marketkurly.controller.dto.product.CreateProductRequest;
+import com.ebcho.marketkurly.controller.dto.product.ProductResponse;
+import com.ebcho.marketkurly.controller.dto.product.UpdateProductRequest;
 import com.ebcho.marketkurly.model.Product;
 import com.ebcho.marketkurly.repository.ProductRepository;
 
@@ -21,7 +21,7 @@ public class ProductService {
 		this.productRepository = productRepository;
 	}
 
-	public ProductResponseDto createProduct(CreateProductRequest request) {
+	public ProductResponse createProduct(CreateProductRequest request) {
 		Product product = new Product(
 			UUID.randomUUID(),
 			request.name(),
@@ -33,27 +33,27 @@ public class ProductService {
 			LocalDateTime.now(),
 			LocalDateTime.now());
 		Product savedProduct = productRepository.insert(product);
-		return ProductResponseDto.of(savedProduct);
+		return ProductResponse.of(savedProduct);
 	}
 
-	public List<ProductResponseDto> getAllProducts() {
+	public List<ProductResponse> getAllProducts() {
 		return productRepository.findAll().stream()
-			.map(ProductResponseDto::of)
+			.map(ProductResponse::of)
 			.toList();
 	}
 
-	public ProductResponseDto getProductById(UUID id) {
+	public ProductResponse getProductById(UUID id) {
 		Product product = productRepository.findById(id)
 			.orElseThrow(() -> new NoSuchElementException("Product with ID: " + id + " not found"));
-		return ProductResponseDto.of(product);
+		return ProductResponse.of(product);
 	}
 
-	public ProductResponseDto updateProduct(UUID id, UpdateProductRequest request) {
+	public ProductResponse updateProduct(UUID id, UpdateProductRequest request) {
 		Product product = productRepository.findById(id)
 			.orElseThrow(() -> new NoSuchElementException("Product with ID: " + id + " not found"));
 		product.change(request);
 		productRepository.update(product);
-		return ProductResponseDto.of(product);
+		return ProductResponse.of(product);
 	}
 
 	public void deleteProduct(UUID id) {

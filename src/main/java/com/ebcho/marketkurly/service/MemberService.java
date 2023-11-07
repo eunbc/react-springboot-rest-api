@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.ebcho.marketkurly.controller.dto.CreateMemberRequest;
-import com.ebcho.marketkurly.controller.dto.MemberResponseDto;
-import com.ebcho.marketkurly.controller.dto.UpdateMemberRequest;
+import com.ebcho.marketkurly.controller.dto.member.CreateMemberRequest;
+import com.ebcho.marketkurly.controller.dto.member.MemberResponse;
+import com.ebcho.marketkurly.controller.dto.member.UpdateMemberRequest;
 import com.ebcho.marketkurly.model.Member;
 import com.ebcho.marketkurly.repository.MemberRepository;
 
@@ -22,31 +22,31 @@ public class MemberService {
 		this.memberRepository = memberRepository;
 	}
 
-	public MemberResponseDto createMember(CreateMemberRequest request) {
+	public MemberResponse createMember(CreateMemberRequest request) {
 		Member member = new Member(UUID.randomUUID(), request.name(), request.email(), request.address(),
 			LocalDateTime.now(), LocalDateTime.now());
 		Member savedMember = memberRepository.insert(member);
-		return MemberResponseDto.of(savedMember);
+		return MemberResponse.of(savedMember);
 	}
 
-	public List<MemberResponseDto> getAllMembers() {
+	public List<MemberResponse> getAllMembers() {
 		return memberRepository.findAll().stream()
-			.map(MemberResponseDto::of)
+			.map(MemberResponse::of)
 			.toList();
 	}
 
-	public MemberResponseDto getMemberById(UUID id) {
+	public MemberResponse getMemberById(UUID id) {
 		Member member = memberRepository.findById(id)
 			.orElseThrow(() -> new NoSuchElementException("Member with ID: " + id + " not found"));
-		return MemberResponseDto.of(member);
+		return MemberResponse.of(member);
 	}
 
-	public MemberResponseDto updateMember(UUID id, UpdateMemberRequest request) {
+	public MemberResponse updateMember(UUID id, UpdateMemberRequest request) {
 		Member member = memberRepository.findById(id)
 			.orElseThrow(() -> new NoSuchElementException("Member with ID: " + id + " not found"));
 		member.changeAddress(request.address());
 		memberRepository.update(member);
-		return MemberResponseDto.of(member);
+		return MemberResponse.of(member);
 	}
 
 	public void deleteMember(UUID id) {

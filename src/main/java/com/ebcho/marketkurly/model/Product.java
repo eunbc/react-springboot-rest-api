@@ -3,7 +3,7 @@ package com.ebcho.marketkurly.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.ebcho.marketkurly.controller.dto.UpdateProductRequest;
+import com.ebcho.marketkurly.controller.dto.product.UpdateProductRequest;
 
 public class Product {
 	private final UUID productId;

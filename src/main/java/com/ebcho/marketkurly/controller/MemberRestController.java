@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ebcho.marketkurly.controller.dto.CreateMemberRequest;
-import com.ebcho.marketkurly.controller.dto.MemberResponseDto;
-import com.ebcho.marketkurly.controller.dto.UpdateMemberRequest;
+import com.ebcho.marketkurly.controller.dto.member.CreateMemberRequest;
+import com.ebcho.marketkurly.controller.dto.member.MemberResponse;
+import com.ebcho.marketkurly.controller.dto.member.UpdateMemberRequest;
 import com.ebcho.marketkurly.service.MemberService;
 
 @RestController
@@ -30,27 +30,27 @@ public class MemberRestController {
 	}
 
 	@PostMapping
-	public ResponseEntity<MemberResponseDto> createMember(@RequestBody CreateMemberRequest request) { //todo valid
-		MemberResponseDto createdMember = memberService.createMember(request);
+	public ResponseEntity<MemberResponse> createMember(@RequestBody CreateMemberRequest request) { //todo valid
+		MemberResponse createdMember = memberService.createMember(request);
 		return new ResponseEntity<>(createdMember, HttpStatus.CREATED); // todo Location 추가
 	}
 
 	@GetMapping
-	public ResponseEntity<List<MemberResponseDto>> getAllMembers() {
-		List<MemberResponseDto> members = memberService.getAllMembers();
+	public ResponseEntity<List<MemberResponse>> getAllMembers() {
+		List<MemberResponse> members = memberService.getAllMembers();
 		return new ResponseEntity<>(members, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<MemberResponseDto> getMemberById(@PathVariable UUID id) {
-		MemberResponseDto member = memberService.getMemberById(id);
+	public ResponseEntity<MemberResponse> getMemberById(@PathVariable UUID id) {
+		MemberResponse member = memberService.getMemberById(id);
 		return new ResponseEntity<>(member, HttpStatus.OK);
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<MemberResponseDto> updateMember(@PathVariable UUID id,
+	public ResponseEntity<MemberResponse> updateMember(@PathVariable UUID id,
 		@RequestBody UpdateMemberRequest request) {
-		MemberResponseDto member = memberService.updateMember(id, request);
+		MemberResponse member = memberService.updateMember(id, request);
 		return new ResponseEntity<>(member, HttpStatus.OK);
 	}
 
