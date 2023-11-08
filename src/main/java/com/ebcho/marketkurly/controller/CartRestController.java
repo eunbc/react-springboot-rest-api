@@ -44,18 +44,17 @@ public class CartRestController {
 		return new ResponseEntity<>(cartItems, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{memberId}/{productId}")
-	public ResponseEntity<Void> removeProductFromCart(@PathVariable UUID memberId,
-		@PathVariable UUID productId) {
-		cartService.removeProductFromCart(memberId, productId);
+	@DeleteMapping("/{cartId}")
+	public ResponseEntity<Void> removeProductFromCart(@PathVariable long cartId) {
+		cartService.removeProductFromCart(cartId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	@PatchMapping("/{memberId}/{productId}")
-	public ResponseEntity<Void> updateCartItemQuantity(@PathVariable UUID memberId,
-		@PathVariable UUID productId,
+	@PatchMapping("/{cartId}")
+	public ResponseEntity<Void> updateCartItemQuantity(@PathVariable long cartId,
 		@RequestBody UpdateCartItemRequest request) {
-		cartService.updateCartItemQuantity(memberId, productId, request);
+		cartService.updateCartItemQuantity(cartId, request);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
 }

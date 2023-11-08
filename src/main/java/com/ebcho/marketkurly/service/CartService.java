@@ -42,13 +42,13 @@ public class CartService {
 			.toList();
 	}
 
-	public void removeProductFromCart(UUID memberId, UUID productId) {
-		cartRepository.deleteByMemberIdAndProductId(memberId, productId);
+	public void removeProductFromCart(long cartId) {
+		cartRepository.deleteById(cartId);
 	}
 
-	public void updateCartItemQuantity(UUID memberId, UUID productId, UpdateCartItemRequest request) {
-		CartItem cartItem = cartRepository.findByMemberIdAndProductId(memberId, productId).orElseThrow(
-			() -> new NoSuchElementException("No cart item found for the given member ID and product ID."));
+	public void updateCartItemQuantity(long cartId, UpdateCartItemRequest request) {
+		CartItem cartItem = cartRepository.findById(cartId).orElseThrow(
+			() -> new NoSuchElementException("No cart found with ID: " + cartId));
 		cartItem.changeQuantity(request.quantity());
 		cartRepository.update(cartItem);
 	}

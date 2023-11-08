@@ -80,16 +80,16 @@ public class CartJdbcRepository implements CartRepository {
 	}
 
 	@Override
-	public Optional<CartItem> findByMemberIdAndProductId(UUID memberId, UUID productId) {
-		String sql = "SELECT * FROM cart_item WHERE member_id = ? AND product_id = ?";
-		List<CartItem> cartItems = jdbcTemplate.query(sql, cartItemRowMapper, toBytes(memberId), toBytes(productId));
+	public Optional<CartItem> findById(long cartId) {
+		final String sql = "SELECT * FROM cart_item WHERE cart_id = ? ";
+		List<CartItem> cartItems = jdbcTemplate.query(sql, cartItemRowMapper, cartId);
 		return cartItems.stream().findFirst();
 	}
 
 	@Override
-	public void deleteByMemberIdAndProductId(UUID memberId, UUID productId) {
-		String sql = "DELETE FROM cart_item WHERE member_id = ? AND product_id = ?";
-		jdbcTemplate.update(sql, toBytes(memberId), toBytes(productId));
+	public void deleteById(long cartId) {
+		final String sql = "DELETE FROM cart_item WHERE cart_id = ?";
+		jdbcTemplate.update(sql, cartId);
 	}
 
 }
