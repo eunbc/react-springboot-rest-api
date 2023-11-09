@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마켓컬리 :: 내일의 장보기, 마켓컬리</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <link rel="stylesheet" th:href="@{/kurly.css}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+</head>
+<body>
+
+<div th:replace="~{fragments/nav}"></div>
+
+<div class="content-default">
+    <div class="view-title">
+        <h3>장바구니</h3>
+    </div>
+
+    <select id="memberSelect" class="form-control" onchange="memberChanged(this)">
+        <option value="">회원 선택</option>
+        <th:block th:each="member : ${members}">
+            <option th:value="${member.memberId}" th:text="${member.name + ' (' + member.memberId + ')'}"></option>
+        </th:block>
+    </select>
+
+    <br/>
+</div>
+
+<script>
+    function memberChanged(selectObj) {
+        var memberId = selectObj.value;
+        if (memberId) {
+            location.href = '/carts/' + memberId;
+        }
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

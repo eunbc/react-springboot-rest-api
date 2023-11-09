@@ -92,4 +92,10 @@ public class CartJdbcRepository implements CartRepository {
 		jdbcTemplate.update(sql, cartId);
 	}
 
+	@Override
+	public void clearCartByMemberId(UUID memberId) {
+		final String sql = "DELETE FROM cart_item WHERE member_id = ?";
+		jdbcTemplate.update(sql, toBytes(memberId));
+	}
+
 }

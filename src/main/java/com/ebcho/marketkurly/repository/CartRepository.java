@@ -19,4 +19,5 @@ public interface CartRepository {
 
 	void deleteById(long cartId);
 
+	void clearCartByMemberId(UUID memberId);
 }

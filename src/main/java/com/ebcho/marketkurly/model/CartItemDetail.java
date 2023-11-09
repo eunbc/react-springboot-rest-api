@@ -2,7 +2,7 @@ package com.ebcho.marketkurly.model;
 
 import java.util.UUID;
 
-public class CartItemDetail extends CartItem{
+public class CartItemDetail extends CartItem {
 
 	private final Product product;
 

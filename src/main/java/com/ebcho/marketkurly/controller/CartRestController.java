@@ -3,7 +3,6 @@ package com.ebcho.marketkurly.controller;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ebcho.marketkurly.controller.dto.cart.AddToCartRequest;
 import com.ebcho.marketkurly.controller.dto.cart.CartItemDetailResponse;
-import com.ebcho.marketkurly.controller.dto.cart.CartItemResponse;
 import com.ebcho.marketkurly.controller.dto.cart.UpdateCartItemRequest;
 import com.ebcho.marketkurly.service.CartService;
 
