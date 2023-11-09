@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>신규회원 등록</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/kurly.css}" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+
+
+<div class="content-default">
+    <div class="view-title">
+        <h3>신규회원 등록</h3>
+    </div>
+
+    <!-- Enhanced form with Bootstrap styling -->
+    <form id="memberForm" class="admin-content-small mt-4">
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Name <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" placeholder="Name">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">Email <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="email" placeholder="Email">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="address" class="col-sm-2 col-form-label">Address <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="address" placeholder="Address">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-12 text-center">
+                <button type="submit" class="button-small">등록하기</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Existing scripts -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#memberForm').on('submit', function(e) {
+            e.preventDefault();
+            var formData = {
+                name: $('#name').val(),
+                email: $('#email').val(),
+                address: $('#address').val()
+            };
+
+            $.ajax({
+                url: '/api/v1/members',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    console.log(response);
+                    window.location.href = '/members';
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

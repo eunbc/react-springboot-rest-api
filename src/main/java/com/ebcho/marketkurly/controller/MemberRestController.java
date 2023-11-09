@@ -41,7 +41,7 @@ public class MemberRestController {
 		return new ResponseEntity<>(members, HttpStatus.OK);
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping( "/{id}")
 	public ResponseEntity<MemberResponse> getMemberById(@PathVariable UUID id) {
 		MemberResponse member = memberService.getMemberById(id);
 		return new ResponseEntity<>(member, HttpStatus.OK);

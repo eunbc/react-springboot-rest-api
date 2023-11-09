@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마켓컬리 :: 내일의 장보기, 마켓컬리</title>
+    <link rel="stylesheet" th:href="@{/kurly.css}"/>
+    <style>
+
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+<div class="content-default">
+    <div class="view-title">
+        <h3>회원 목록</h3>
+    </div>
+    <div class="admin-content">
+        <input type="button" value="신규회원 등록" th:onclick="'location.href=\'' + @{/members/create} + '\''" class="button-small"/>
+        <p><br/></p>
+        <table class="admin-list-table">
+            <thead>
+            <tr>
+                <th style="width:200px">ID</th>
+                <th style="width:100px">이름</th>
+                <th style="width:200px">이메일</th>
+                <th style="width:200px">가입일자</th>
+                <th style="width:100px">상세</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member, iterStat : ${members}">
+                <td th:text="${member.memberId}">회원 id</td>
+                <td th:text="${member.name}">회원 이름</td>
+                <td th:text="${member.email}">이메일</td>
+                <td th:text="${member.createdAt}">가입일</td>
+                <td>
+                    <a th:href="@{/members/{memberId}(memberId=${member.memberId})}">상세보기</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

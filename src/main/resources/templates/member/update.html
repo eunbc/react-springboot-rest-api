@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 수정</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .member-detail{
+            margin:0 auto;
+        }
+        .member-detail-table{
+            width: 100%;
+            margin-top: 20px;
+        }
+        .member-detail-table tr td:first-child{
+            width: 150px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+
+<div class="container content-default">
+    <div class="view-title">
+        <h3>회원 상세</h3>
+    </div>
+
+    <form id="updateMemberForm">
+        <div class="member-detail">
+            <table class="table member-detail-table">
+                <tr>
+                    <td>Member ID</td>
+                    <td><input type="text" class="form-control" id="memberId" th:value="${member.memberId}" readonly></td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td><input type="text" class="form-control" th:value="${member.name}" readonly></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input type="text" class="form-control" th:value="${member.email}" readonly></td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td><input type="text" class="form-control" id="address" th:value="${member.address}"></td>
+                </tr>
+                <tr>
+                    <td>생성 시각</td>
+                    <td><input type="text" class="form-control" th:value="${member.createdAt}" readonly></td>
+                </tr>
+                <tr>
+                    <td>최종 변경 시각</td>
+                    <td><input type="text" class="form-control" th:value="${member.updatedAt}" readonly></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="text-right">
+            <button type="submit" class="button-small" >저장하기</button>
+            <input type="button" value="목록으로 돌아가기" th:onclick="'location.href=\'' + @{/members} + '\''" class="button-outline-small"/>
+        </div>
+    </form>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#updateMemberForm').on('submit', function(e) {
+            e.preventDefault();
+            var memberId = $('#memberId').val();
+
+            var formData = {
+                address: $('#address').val()
+            };
+
+            $.ajax({
+                url: '/api/v1/members/' + memberId,
+                type: 'PATCH',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    console.log(response);
+                    window.location.href = '/members';
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>
