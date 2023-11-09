@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마켓컬리 :: 내일의 장보기, 마켓컬리</title>
+    <link rel="stylesheet" th:href="@{/kurly.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+<div class="content-default">
+    <div class="view-title">
+        <h3>상품 목록</h3>
+    </div>
+    <div class="admin-content">
+        <input type="button" value="신규 상품 등록" th:onclick="'location.href=\'' + @{/products/create} + '\''" class="button-small"/>
+        <p><br/></p>
+        <table class="admin-list-table">
+            <thead>
+            <tr>
+                <th style="width:200px">ID</th>
+                <th style="width:200px">상품명</th>
+                <th style="width:200px">카테고리</th>
+                <th style="width:100px">가격</th>
+<!--                <th style="width:100px">재고</th>-->
+<!--                <th style="width:100px">판매량</th>-->
+                <th style="width:200px">등록일</th>
+<!--                <th style="width:200px">수정일</th>-->
+                <th style="width:100px">상세</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product, iterStat : ${products}">
+                <td th:text="${product.productId}">상품 ID</td>
+                <td th:text="${product.name}">상품명</td>
+                <td th:text="${product.category}">카테고리</td>
+                <td th:text="${product.price}">가격</td>
+<!--                <td th:text="${product.stock}">재고</td>-->
+<!--                <td th:text="${product.sales}">판매량</td>-->
+                <td th:text="${product.createdAt}">등록일</td>
+<!--                <td th:text="${product.updatedAt}">수정일</td>-->
+                <td>
+                    <a th:href="@{/products/{productId}(productId=${product.productId})}">상세보기</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
