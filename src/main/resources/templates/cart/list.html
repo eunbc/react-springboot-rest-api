@@ -88,6 +88,8 @@
                             <i class="xi-close"></i>
                         </a>
                     </td>
+
+                    <input type="hidden" th:value="${cartItem.productId}" class="product-id" />
                 </tr>
             </table>
         </div>
@@ -102,12 +104,6 @@
         </div>
     </div>
 
-    <script>
-        function placeOrder() {
-            // Add your logic to handle the order process
-            alert('Order placed!');
-        }
-    </script>
 
     <style>
         .cart-and-total-container {
@@ -161,6 +157,49 @@
             }
         });
     });
+
+    function placeOrder() {
+        var orderItems = [];
+        $('.cart-list tr').each(function() {
+            // Skipping the header row and any row without a hidden product-id
+            var productId = $(this).find('.product-id').val();
+            if (productId) {
+                var quantity = parseInt($(this).find('td:nth-child(2)').text(), 10);
+                var price = parseFloat($(this).find('td:nth-child(3)').text());
+
+                // Convert productId to UUID format, assuming it's a valid UUID string
+                orderItems.push({ productId: productId, price: price, quantity: quantity });
+            }
+        });
+
+        // Ensure that there's at least one item in the cart
+        if (orderItems.length === 0) {
+            alert('장바구니가 비어 있습니다.');
+            return;
+        }
+
+        var orderRequest = {
+            memberId: $('#memberSelect').val(), // Retrieves the selected member ID
+            orderItems: orderItems
+        };
+
+        $.ajax({
+            url: '/api/v1/orders', // Update this URL to your order creation endpoint
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(orderRequest),
+            success: function(response) {
+                console.log("Order placed successfully", response);
+                alert('주문이 성공적으로 처리되었습니다.');
+                window.location.reload(); // Or redirect to a success page
+            },
+            error: function(xhr, status, error) {
+                alert("주문 처리 중 오류가 발생했습니다: " + error);
+            }
+        });
+    }
+
+
 </script>
 
 </body>

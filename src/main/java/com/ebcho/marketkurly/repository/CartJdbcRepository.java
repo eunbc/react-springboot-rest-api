@@ -20,15 +20,12 @@ public class CartJdbcRepository implements CartRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	private final RowMapper<CartItem> cartItemRowMapper = (rs, rowNum) -> {
-		CartItem cartItem = new CartItem(
-			rs.getLong("cart_id"),
-			toUUID(rs.getBytes("member_id")),
-			toUUID(rs.getBytes("product_id")),
-			rs.getInt("quantity")
-		);
-		return cartItem;
-	};
+	private final RowMapper<CartItem> cartItemRowMapper = (rs, rowNum) -> new CartItem(
+		rs.getLong("cart_id"),
+		toUUID(rs.getBytes("member_id")),
+		toUUID(rs.getBytes("product_id")),
+		rs.getInt("quantity")
+	);
 
 	private RowMapper<CartItemDetail> cartItemWithProductDetailsRowMapper = (rs, rowNum) -> {
 		long cartId = rs.getLong("cart_id");
