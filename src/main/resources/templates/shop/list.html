@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마켓컬리 :: 내일의 장보기, 마켓컬리</title>
+    <style>
+        .content-default-goods{
+            width: 1000px;
+            margin: 0 auto;
+            padding: 50px 0 200px 0;
+        }
+        .col-lg-4{
+            padding: 20px;
+            height: 600px;
+            cursor: pointer;
+        }
+        .goods-image{
+            width: 310px;
+        }
+        .goods-image img{
+            width: 100%;
+            border: 1px solid #F7F7F7;
+        }
+        .goods-image img:hover{
+            transform: scale(1.03);
+            transition: .5s;
+        }
+        .goods-content .goods-name{
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .goods-content .goods-price{
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .goods-content .goods-short{
+            font-size: small;
+            color: #A7A7A7;
+        }
+        .goods-content{
+            margin-top: 10px;
+        }
+        .goods-content div{
+            padding: 5px;
+        }
+        .font-color-red{
+            color: #D66672;
+        }
+        .price-gray{
+            font-size: 20px;
+            color: #9D9C9A;
+            text-decoration: line-through;
+        }
+        ul.goodsMenu > li {
+            text-align: center;
+            float: left;
+            line-height: 50px;
+            vertical-align: middle;
+            position : relative;
+            border-bottom : 1px solid #C2C0C3;
+        }
+        ul.goodsMenu > li a {
+            width: 160px;
+            display: inline-block;
+            text-decoration:none;
+            color: #383838;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        ul.goodsMenu > li #menuSelected{
+            background-color: white;
+            font-weight: 800;
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/kurly.css}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+
+<div class="content-default-goods">
+
+    <p><br></p>
+    <div class="row">
+        <div th:each="product : ${products}" class="col-4" th:onclick="|window.location.href='@{/shop/{productId}(productId=${product.productId})}'|">
+            <div class="goods-image">
+                <img th:src="@{'/images/placeholder.png'}" alt="Product Image" th:alt="${product.name}"/>
+            </div>
+            <div class="goods-content">
+                <div class="goods-name" th:text="${product.name}"></div>
+                <div class="goods-price">
+                    <h5><span th:text="${product.price}">가격</span><span class="small-font">원</span></h5>
+                </div>
+                <div class="goods-short" th:text="${product.description}">상품 설명</div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<!-- 푸터 포함 -->
+
+<!-- Bootstrap JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
