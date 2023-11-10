@@ -62,7 +62,7 @@ public class OrderJdbcRepository implements OrderRepository {
 
 	@Override
 	public Order insert(Order order) {
-		String insertOrderSql = "INSERT INTO `order` (order_id, member_id, order_status, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
+		final String insertOrderSql = "INSERT INTO `order` (order_id, member_id, order_status, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
 		jdbcTemplate.update(insertOrderSql,
 			toBytes(order.getOrderId()),
 			toBytes(order.getMemberId()),
@@ -70,7 +70,7 @@ public class OrderJdbcRepository implements OrderRepository {
 			order.getCreatedAt(),
 			order.getUpdatedAt());
 
-		String insertOrderItemSql = "INSERT INTO order_item (order_id, product_id, price, quantity) VALUES (?, ?, ?, ?)";
+		final String insertOrderItemSql = "INSERT INTO order_item (order_id, product_id, price, quantity) VALUES (?, ?, ?, ?)";
 		order.getOrderItems().forEach(orderItem -> jdbcTemplate.update(
 			insertOrderItemSql,
 			toBytes(order.getOrderId()),
@@ -109,7 +109,7 @@ public class OrderJdbcRepository implements OrderRepository {
 
 		Order order = orders.get(0);
 
-		String itemSql = "SELECT oi.order_id, oi.product_id, oi.price AS order_item_price, oi.quantity, "
+		final String itemSql = "SELECT oi.order_id, oi.product_id, oi.price AS order_item_price, oi.quantity, "
 			+ "p.product_id, p.name, p.category, p.price AS product_price, p.stock, p.sales, p.description, p.created_at, p.updated_at "
 			+ "FROM order_item oi JOIN product p ON oi.product_id = p.product_id WHERE oi.order_id = ?";
 		List<OrderItem> items = jdbcTemplate.query(itemSql, orderItemRowMapper, toBytes(orderId));

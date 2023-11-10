@@ -27,7 +27,7 @@ public class CartJdbcRepository implements CartRepository {
 		rs.getInt("quantity")
 	);
 
-	private RowMapper<CartItemDetail> cartItemWithProductDetailsRowMapper = (rs, rowNum) -> {
+	private final RowMapper<CartItemDetail> cartItemWithProductDetailsRowMapper = (rs, rowNum) -> {
 		long cartId = rs.getLong("cart_id");
 		UUID memberId = toUUID(rs.getBytes("member_id"));
 		UUID productId = toUUID(rs.getBytes("product_id"));
@@ -54,20 +54,20 @@ public class CartJdbcRepository implements CartRepository {
 
 	@Override
 	public void insert(CartItem cartItem) {
-		String sql = "INSERT INTO cart_item (member_id, product_id, quantity) VALUES (?, ?, ?)";
+		final String sql = "INSERT INTO cart_item (member_id, product_id, quantity) VALUES (?, ?, ?)";
 		jdbcTemplate.update(sql, toBytes(cartItem.getMemberId()), toBytes(cartItem.getProductId()),
 			cartItem.getQuantity());
 	}
 
 	@Override
 	public void update(CartItem cartItem) {
-		String sql = "UPDATE cart_item SET quantity = ? WHERE cart_id = ?";
+		final String sql = "UPDATE cart_item SET quantity = ? WHERE cart_id = ?";
 		jdbcTemplate.update(sql, cartItem.getQuantity(), cartItem.getCartId());
 	}
 
 	@Override
 	public List<CartItemDetail> findByMemberId(UUID memberId) {
-		String sql = "SELECT ci.cart_id, ci.member_id, ci.product_id, ci.quantity, " +
+		final String sql = "SELECT ci.cart_id, ci.member_id, ci.product_id, ci.quantity, " +
 			"p.product_id, p.name, p.category, p.price, p.stock, p.sales, p.description, p.created_at, p.updated_at " +
 			"FROM cart_item ci " +
 			"JOIN product p ON ci.product_id = p.product_id " +
