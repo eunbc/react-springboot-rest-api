@@ -57,7 +57,7 @@ public class CartService {
 		cartRepository.clearCartByMemberId(memberId);
 	}
 
-	private void validateMemberAndProduct(UUID memberId, UUID productId) { // todo : member, product 확인을 언제 하지?
+	private void validateMemberAndProduct(UUID memberId, UUID productId) {
 		memberRepository.findById(memberId)
 			.orElseThrow(() -> new NoSuchElementException("No member found with ID: " + memberId));
 
