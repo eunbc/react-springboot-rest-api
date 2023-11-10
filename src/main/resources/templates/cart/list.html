@@ -80,9 +80,9 @@
                     <th style="width:70px">삭제</th>
                 </tr>
                 <tr th:each="cartItem : ${carts}">
-                    <td th:text="${cartItem.name}">Product Name</td>
-                    <td th:text="${cartItem.quantity}">Quantity</td>
-                    <td th:text="${cartItem.price}">Price</td>
+                    <td><span class="item-name" th:text="${cartItem.name}"></span></td>
+                    <td><span class="item-quantity" th:text="${cartItem.quantity}"></span></td>
+                    <td><span class="item-price" th:text="${cartItem.price}"></span></td>
                     <td>
                         <a href="#" class="delete-icon" th:attr="data-cart-id=${cartItem.cartId}">
                             <i class="xi-close"></i>
@@ -98,10 +98,11 @@
             <!-- Total Price and Order Button with Thymeleaf content -->
             <div class="total-price">
                 <span>Total Price: </span>
-                <span>0</span>
+                <span id="totalPrice">0</span>
             </div>
             <button class="button" onclick="placeOrder()">주문하기</button>
         </div>
+
     </div>
 
 
@@ -131,6 +132,8 @@
 </div>
 <script>
     $(document).ready(function(){
+        calculateTotalPrice(); // 페이지 로드 시 총 금액 계산
+
         // Delete icon click handler
         $('.cart-list').on('click', '.delete-icon', function(e){
             e.preventDefault();
@@ -199,6 +202,27 @@
         });
     }
 
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+        $('.cart-list tr').each(function() {
+            var priceText = $(this).find('.item-price').text();
+            var quantityText = $(this).find('.item-quantity').text();
+            console.log(priceText);
+            console.log(quantityText);
+
+            // 숫자로 변환하기 전에 텍스트 정제
+            var price = parseInt(priceText.replace(/[^0-9.]/g, ""), 10);
+            var quantity = parseInt(quantityText, 10);
+            console.log(price);
+            console.log(quantity);
+
+            if (!isNaN(price) && !isNaN(quantity)) {
+                totalPrice += (price * quantity);
+            }
+        });
+        console.log(totalPrice);
+        $('#totalPrice').text(totalPrice); // 숫자 형식으로 변환
+    }
 
 </script>
 
