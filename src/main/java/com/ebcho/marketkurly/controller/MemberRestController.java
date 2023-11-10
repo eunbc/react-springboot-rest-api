@@ -1,5 +1,6 @@
 package com.ebcho.marketkurly.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ebcho.marketkurly.controller.dto.member.CreateMemberRequest;
 import com.ebcho.marketkurly.controller.dto.member.MemberResponse;
 import com.ebcho.marketkurly.controller.dto.member.UpdateMemberRequest;
 import com.ebcho.marketkurly.service.MemberService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/members")
@@ -30,9 +34,14 @@ public class MemberRestController {
 	}
 
 	@PostMapping
-	public ResponseEntity<MemberResponse> createMember(@RequestBody CreateMemberRequest request) { //todo valid
+	public ResponseEntity<MemberResponse> createMember(@Valid @RequestBody CreateMemberRequest request) {
 		MemberResponse createdMember = memberService.createMember(request);
-		return new ResponseEntity<>(createdMember, HttpStatus.CREATED); // todo Location 추가
+		URI location = ServletUriComponentsBuilder
+			.fromCurrentRequest()
+			.path("/{memberId}")
+			.buildAndExpand(createdMember.memberId())
+			.toUri();
+		return ResponseEntity.created(location).body(createdMember);
 	}
 
 	@GetMapping
@@ -49,7 +58,7 @@ public class MemberRestController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<MemberResponse> updateMember(@PathVariable UUID id,
-		@RequestBody UpdateMemberRequest request) {
+		@Valid @RequestBody UpdateMemberRequest request) {
 		MemberResponse member = memberService.updateMember(id, request);
 		return new ResponseEntity<>(member, HttpStatus.OK);
 	}

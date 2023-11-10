@@ -2,5 +2,9 @@ package com.ebcho.marketkurly.controller.dto.order;
 
 import java.util.UUID;
 
-public record CreateOrderItemRequest(UUID productId, long price, int quantity) {
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+
+public record CreateOrderItemRequest(@NotNull UUID productId, @PositiveOrZero long price, @Positive int quantity) {
 }

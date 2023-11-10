@@ -19,6 +19,8 @@ import com.ebcho.marketkurly.controller.dto.cart.CartItemDetailResponse;
 import com.ebcho.marketkurly.controller.dto.cart.UpdateCartItemRequest;
 import com.ebcho.marketkurly.service.CartService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/carts")
 public class CartRestController {
@@ -31,7 +33,7 @@ public class CartRestController {
 
 	@PostMapping("/{memberId}")
 	public ResponseEntity<Void> addProductToCart(@PathVariable UUID memberId,
-		@RequestBody AddToCartRequest request) {
+		@Valid @RequestBody AddToCartRequest request) {
 		cartService.addProductToCart(memberId, request);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -50,7 +52,7 @@ public class CartRestController {
 
 	@PatchMapping("/{cartId}")
 	public ResponseEntity<Void> updateCartItemQuantity(@PathVariable long cartId,
-		@RequestBody UpdateCartItemRequest request) {
+		@Valid @RequestBody UpdateCartItemRequest request) {
 		cartService.updateCartItemQuantity(cartId, request);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
