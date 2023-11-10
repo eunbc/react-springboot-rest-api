@@ -21,6 +21,14 @@ public class Member {
 		this.updatedAt = updatedAt;
 	}
 
+	public void changeAddress(String address) {
+		if (address == null || address.isEmpty()) {
+			throw new IllegalArgumentException("Address cannot be blank");
+		}
+		this.address = address;
+		this.updatedAt = LocalDateTime.now();
+	}
+
 	public UUID getMemberId() {
 		return memberId;
 	}
@@ -45,8 +53,4 @@ public class Member {
 		return updatedAt;
 	}
 
-	public void changeAddress(String address) {
-		this.address = address;
-		this.updatedAt = LocalDateTime.now();
-	}
 }

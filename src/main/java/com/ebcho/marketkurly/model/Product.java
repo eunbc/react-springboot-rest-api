@@ -30,6 +30,16 @@ public class Product {
 		this.updatedAt = updatedAt;
 	}
 
+	public void changeProduct(UpdateProductRequest request) {
+		this.name = request.name();
+		this.category = request.category();
+		this.price = request.price();
+		this.stock = request.stock();
+		this.sales = request.sales();
+		this.description = request.description();
+		this.updatedAt = LocalDateTime.now();
+	}
+
 	public UUID getProductId() {
 		return productId;
 	}
@@ -66,13 +76,4 @@ public class Product {
 		return updatedAt;
 	}
 
-	public void change(UpdateProductRequest request) {
-		this.name = request.name();
-		this.category = request.category();
-		this.price = request.price();
-		this.stock = request.stock();
-		this.sales = request.sales();
-		this.description = request.description();
-		this.updatedAt = LocalDateTime.now();
-	}
 }

@@ -19,6 +19,10 @@ public class CartItem {
 		return new CartItem(0, memberId, productId, quantity);
 	}
 
+	public void changeQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public long getCartId() {
 		return cartId;
 	}
@@ -35,7 +39,4 @@ public class CartItem {
 		return quantity;
 	}
 
-	public void changeQuantity(int quantity) {
-		this.quantity = quantity;
-	}
 }

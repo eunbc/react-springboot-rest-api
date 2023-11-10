@@ -11,7 +11,7 @@ public class Order {
 	private OrderStatus orderStatus;
 	private final LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
-	private List<OrderItem> orderItems = new ArrayList<>(); // todo : 이렇게 해도 되나?
+	private List<OrderItem> orderItems = new ArrayList<>();
 
 	public Order(UUID orderId, UUID memberId, List<OrderItem> orderItems) {
 		this.orderId = orderId;
@@ -29,6 +29,10 @@ public class Order {
 		this.orderStatus = orderStatus;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+	}
+
+	public void setOrderItems(List<OrderItem> items) {
+		this.orderItems = items;
 	}
 
 	public UUID getOrderId() {
@@ -55,7 +59,4 @@ public class Order {
 		return updatedAt;
 	}
 
-	public void setOrderItems(List<OrderItem> items) {
-		this.orderItems = items;
-	}
 }

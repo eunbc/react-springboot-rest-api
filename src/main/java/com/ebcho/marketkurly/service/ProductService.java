@@ -51,7 +51,7 @@ public class ProductService {
 	public ProductResponse updateProduct(UUID id, UpdateProductRequest request) {
 		Product product = productRepository.findById(id)
 			.orElseThrow(() -> new NoSuchElementException("Product with ID: " + id + " not found"));
-		product.change(request);
+		product.changeProduct(request);
 		productRepository.update(product);
 		return ProductResponse.of(product);
 	}
