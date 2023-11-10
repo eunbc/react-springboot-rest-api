@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.ebcho.marketkurly.controller.dto.member.CreateMemberRequest;
 import com.ebcho.marketkurly.controller.dto.member.MemberResponse;
 import com.ebcho.marketkurly.service.MemberService;
 

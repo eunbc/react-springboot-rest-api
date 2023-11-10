@@ -8,11 +8,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ebcho.marketkurly.controller.dto.member.MemberResponse;
 import com.ebcho.marketkurly.controller.dto.order.CreateOrderItemRequest;
 import com.ebcho.marketkurly.controller.dto.order.CreateOrderRequest;
 import com.ebcho.marketkurly.controller.dto.order.OrderDetailResponse;
-import com.ebcho.marketkurly.controller.dto.order.OrderItemResponse;
 import com.ebcho.marketkurly.controller.dto.order.OrderResponse;
 import com.ebcho.marketkurly.model.Member;
 import com.ebcho.marketkurly.model.Order;
@@ -43,9 +41,10 @@ public class OrderService {
 		List<CreateOrderItemRequest> orderItemRequests = request.orderItems();
 
 		List<OrderItem> orderItems = new ArrayList<>();
-		for(CreateOrderItemRequest orderItemRequest : orderItemRequests) {
+		for (CreateOrderItemRequest orderItemRequest : orderItemRequests) {
 			Product product = productRepository.findById(orderItemRequest.productId())
-				.orElseThrow(() -> new NoSuchElementException("Product not found for ID: " + orderItemRequest.productId()));
+				.orElseThrow(
+					() -> new NoSuchElementException("Product not found for ID: " + orderItemRequest.productId()));
 			OrderItem orderItem = new OrderItem(product, orderItemRequest.price(), orderItemRequest.quantity());
 			orderItems.add(orderItem);
 		}

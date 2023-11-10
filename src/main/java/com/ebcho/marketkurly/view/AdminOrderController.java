@@ -31,7 +31,7 @@ public class AdminOrderController {
 	@GetMapping("/orders/{orderId}")
 	public String getOrderById(@PathVariable UUID orderId, Model model) {
 		OrderDetailResponse order = orderService.getOrderById(orderId);
-		model.addAttribute("order",order);
+		model.addAttribute("order", order);
 		return "order/detail";
 	}
 }

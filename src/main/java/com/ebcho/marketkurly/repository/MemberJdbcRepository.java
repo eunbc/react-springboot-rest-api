@@ -2,7 +2,6 @@ package com.ebcho.marketkurly.repository;
 
 import static com.ebcho.marketkurly.util.JdbcUtils.*;
 
-import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -69,6 +68,5 @@ public class MemberJdbcRepository implements MemberRepository {
 		final String sql = "DELETE FROM member WHERE member_id = ?";
 		jdbcTemplate.update(sql, toBytes(memberId));
 	}
-
 
 }
