@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS member
     updated_at datetime DEFAULT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS product
 (
     product_id  BINARY(16) PRIMARY KEY,
