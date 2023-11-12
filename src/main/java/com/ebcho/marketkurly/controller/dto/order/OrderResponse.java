@@ -6,7 +6,10 @@ import java.util.UUID;
 import com.ebcho.marketkurly.model.Order;
 import com.ebcho.marketkurly.model.OrderStatus;
 
-public record OrderResponse(UUID orderId, OrderStatus orderStatus, int totalItems, long totalPrice,
+public record OrderResponse(UUID orderId,
+							OrderStatus orderStatus,
+							int totalItems,
+							long totalPrice,
 							LocalDateTime createdAt) {
 	public static OrderResponse of(Order order) {
 		int totalItems = order.getOrderItems().size();
@@ -21,6 +24,5 @@ public record OrderResponse(UUID orderId, OrderStatus orderStatus, int totalItem
 			totalPrice,
 			order.getCreatedAt()
 		);
-
 	}
 }
