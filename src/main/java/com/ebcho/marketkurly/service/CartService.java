@@ -42,15 +42,17 @@ public class CartService {
 			.toList();
 	}
 
-	public void removeProductFromCart(long cartId) {
-		cartRepository.deleteById(cartId);
-	}
-
 	public void updateCartItemQuantity(long cartId, UpdateCartItemRequest request) {
 		CartItem cartItem = cartRepository.findById(cartId).orElseThrow(
 			() -> new NoSuchElementException("No cart found with ID: " + cartId));
 		cartItem.changeQuantity(request.quantity());
 		cartRepository.update(cartItem);
+	}
+
+	public void removeProductFromCart(long cartId) {
+		CartItem cartItem = cartRepository.findById(cartId).orElseThrow(
+			() -> new NoSuchElementException("No cart found with ID: " + cartId));
+		cartRepository.deleteById(cartItem.getCartId());
 	}
 
 	public void clearCart(UUID memberId) {
