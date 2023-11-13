@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 상세</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .member-detail{
+            margin:0 auto;
+        }
+        .member-detail-top{
+            width: 500px;
+            height: 600px;
+            float: left;
+            padding: 50px;
+        }
+        .member-detail-bottom{
+            text-align: center;
+        }
+        .member-detail-table{
+            width: 500px;
+            margin-top: 100px;
+        }
+        .member-detail-table tr{
+            border-bottom: 1px solid #F7F7F7;
+        }
+        .member-detail-table tr td:first-child{
+            width: 150px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+
+<div class="content-default">
+    <div class="view-title">
+        <h3>상품 상세</h3>
+    </div>
+    <div class="member-detail">
+        <table class="member-detail-table">
+            <tr>
+                <td>Product ID</td>
+                <td id="productId" th:text="${product.productId}"></td>
+            </tr>
+            <tr>
+                <td>상품명</td>
+                <td th:text="${product.name}"></td>
+            </tr>
+            <tr>
+                <td>카테고리</td>
+                <td th:text="${product.category}"></td>
+            </tr>
+            <tr>
+                <td>가격</td>
+                <td th:text="${product.price}"></td>
+            </tr>
+            <tr>
+                <td>재고</td>
+                <td th:text="${product.stock}"></td>
+            </tr>
+            <tr>
+                <td>판매량</td>
+                <td th:text="${product.sales}"></td>
+            </tr>
+            <tr>
+                <td>설명</td>
+                <td th:text="${product.description}"></td>
+            </tr>
+            <tr>
+                <td>생성 시각</td>
+                <td th:text="${product.createdAt}"></td>
+            </tr>
+            <tr>
+                <td>최종 변경 시각</td>
+                <td th:text="${product.updatedAt}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="text-align: right">
+        <input type="button" value="수정" th:onclick="'location.href=\'' + @{/products/update/{productId}(productId=${product.productId})} + '\''" class="button-outline-small"/>
+        <input type="button" value="삭제" id="button-delete" class="button-outline-small"/>
+        <input type="button" value="목록으로 돌아가기" th:onclick="'location.href=\'' + @{/products} + '\''" class="button-small"/>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#button-delete').click(function() {
+            var productId = $('#productId').text();
+
+            if (confirm('정말 삭제하시겠습니까?')) {
+                $.ajax({
+                    url: '/api/v1/products/' + productId,
+                    type: 'DELETE',
+                    success: function() {
+                        alert('삭제가 완료되었습니다.');
+                        window.location.href = '/products';
+                    },
+                    error: function(error) {
+                        alert('삭제 중 오류가 발생했습니다.');
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

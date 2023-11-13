@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 수정</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .product-detail{
+            margin: 0 auto;
+        }
+        .product-detail-table{
+            width: 100%;
+            margin-top: 20px;
+        }
+        .product-detail-table tr td:first-child{
+            width: 150px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+
+<div class="container content-default">
+    <div class="view-title">
+        <h3>상품 수정</h3>
+    </div>
+
+    <form id="updateProductForm">
+        <div class="product-detail">
+            <table class="table product-detail-table">
+                <tr>
+                    <td>Product ID</td>
+                    <td><input type="text" class="form-control" id="productId" th:value="${product.productId}" readonly></td>
+                </tr>
+                <tr>
+                    <td>상품명</td>
+                    <td><input type="text" class="form-control" id="name" th:value="${product.name}"></td>
+                </tr>
+                <tr>
+                    <td>카테고리</td>
+                    <td>
+                        <select class="form-control" id="category">
+                            <option value="MEAT_AND_SEAFOODS" th:selected="${product.category.name() == 'MEAT_AND_SEAFOODS'}">Meat and Seafoods</option>
+                            <option value="BREADS_AND_BAKERY" th:selected="${product.category.name() == 'BREADS_AND_BAKERY'}">Breads and Bakery</option>
+                            <option value="FRUITS_AND_VEGETABLES" th:selected="${product.category.name() == 'FRUITS_AND_VEGETABLES'}">Fruits and Vegetables</option>
+                            <option value="BEVERAGES" th:selected="${product.category.name() == 'BEVERAGES'}">Beverages</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>가격</td>
+                    <td><input type="number" class="form-control" id="price" th:value="${product.price}"></td>
+                </tr>
+                <tr>
+                    <td>재고</td>
+                    <td><input type="number" class="form-control" id="stock" th:value="${product.stock}"></td>
+                </tr>
+                <tr>
+                    <td>판매량</td>
+                    <td><input type="number" class="form-control" id="sales" th:value="${product.sales}"></td>
+                </tr>
+                <tr>
+                    <td>설명</td>
+                    <td><textarea class="form-control" id="description" th:text="${product.description}"></textarea></td>
+                </tr>
+                <tr>
+                    <td>생성 시각</td>
+                    <td><input type="text" class="form-control" th:value="${product.createdAt}" readonly></td>
+                </tr>
+                <tr>
+                    <td>최종 변경 시각</td>
+                    <td><input type="text" class="form-control" th:value="${product.updatedAt}" readonly></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="text-right">
+            <button type="submit" class="button-small">저장하기</button>
+            <button type="button" class="button-outline-small" th:onclick="'location.href=\'' + @{/products} + '\''">목록으로 돌아가기</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#updateProductForm').on('submit', function(e) {
+            e.preventDefault();
+            var productId = $('#productId').val();
+
+            var formData = {
+                name: $('#name').val(),
+                category: $('#category').val(),
+                price: $('#price').val(),
+                stock: $('#stock').val(),
+                sales: $('#sales').val(),
+                description: $('#description').val()
+            };
+
+            $.ajax({
+                url: '/api/v1/products/' + productId,
+                type: 'PATCH',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    alert('상품 정보가 업데이트 되었습니다.');
+                    window.location.href = '/products';
+                },
+                error: function(error) {
+                    alert('상품 정보 업데이트 중 오류가 발생했습니다.');
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

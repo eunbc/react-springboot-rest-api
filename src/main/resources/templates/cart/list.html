@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마켓컬리 :: 내일의 장보기, 마켓컬리</title>
+    <link rel="stylesheet" th:href="@{/kurly.css}" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .cart{
+            float: left;
+        }
+        .cart-price{
+            float: right;
+            width: 280px;
+            background-color: #f7f7f7;
+        }
+        .cart-price div{
+            margin:10px;
+        }
+        .cart-list {
+            width: 800px;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            margin-right: 0px;
+            margin-bottom: 100px;
+        }
+        .cart-list th{
+            padding: 10px;
+            background-color: #f7f7f7;
+        }
+        .cart-list td{
+            padding: 10px;
+        }
+        .cart-list tr{
+            border-bottom: 1px solid #f7f7f7;
+        }
+        .cart-list tr:hover{
+            background-color: #f7f7f7;
+        }
+        .cart-quantity-input{
+            width: 70px;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- Include Navigation -->
+<div th:replace="~{fragments/nav}"></div>
+
+<div class="content-default">
+    <div class="view-title">
+        <h3>장바구니</h3>
+    </div>
+    <!-- Other content goes here -->
+    <select id="memberSelect" class="form-control" onchange="memberChanged(this)">
+        <option value="">회원 선택</option>
+        <th:block th:each="member : ${members}">
+            <option th:value="${member.memberId}"
+                    th:selected="${member.memberId == memberId}"
+                    th:text="${member.name + ' (' + member.memberId + ')'}">
+            </option>
+        </th:block>
+    </select>
+
+
+    <br>
+
+    <!-- Wrapping container for cart list and total -->
+    <div class="cart-and-total-container">
+        <div class="cart-container">
+            <!-- Existing table HTML with Thymeleaf content -->
+            <table class="cart cart-list">
+                <tr>
+                    <th style="width:400px">상품정보</th>
+                    <th style="width:70px">수량</th>
+                    <th style="width:150px">단위당 가격</th>
+                    <th style="width:70px">삭제</th>
+                </tr>
+                <tr th:each="cartItem : ${carts}">
+                    <td><span class="item-name" th:text="${cartItem.name}"></span></td>
+                    <td><span class="item-quantity" th:text="${cartItem.quantity}"></span></td>
+                    <td><span class="item-price" th:text="${cartItem.price}"></span></td>
+                    <td>
+                        <a href="#" class="delete-icon" th:attr="data-cart-id=${cartItem.cartId}">
+                            <i class="xi-close"></i>
+                        </a>
+                    </td>
+
+                    <input type="hidden" th:value="${cartItem.productId}" class="product-id" />
+                </tr>
+            </table>
+        </div>
+
+        <div class="cart-total">
+            <!-- Total Price and Order Button with Thymeleaf content -->
+            <div class="total-price">
+                <span>Total Price: </span>
+                <span id="totalPrice">0</span>
+            </div>
+            <button class="button" onclick="placeOrder()">주문하기</button>
+        </div>
+
+    </div>
+
+
+    <style>
+        .cart-and-total-container {
+            display: flex;
+            align-items: flex-start; /* Adjust alignment as needed */
+        }
+
+        .cart-container {
+            /* Adjust width as needed, depending on your layout */
+            flex-grow: 1; /* Allows cart list to take up available space */
+        }
+
+        .cart-total {
+            width: 280px; /* Adjust as needed */
+            margin-left: 20px;
+            padding: 15px;
+            background-color: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+    </style>
+
+
+</div>
+<script>
+    $(document).ready(function(){
+        calculateTotalPrice(); // 페이지 로드 시 총 금액 계산
+
+        // Delete icon click handler
+        $('.cart-list').on('click', '.delete-icon', function(e){
+            e.preventDefault();
+
+            var cartId = $(this).data('cart-id');
+
+            $.ajax({
+                url: '/api/v1/carts/'+cartId,
+                type: 'DELETE',
+                success: function(result) {
+                    window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred while deleting the item.");
+                }
+            });
+        });
+
+        // Member selection change handler
+        $('#memberSelect').change(function() {
+            var memberId = $(this).val();
+            if (memberId) {
+                location.href = '/carts/' + memberId;
+            }
+        });
+    });
+
+    function placeOrder() {
+        var orderItems = [];
+        $('.cart-list tr').each(function() {
+            // Skipping the header row and any row without a hidden product-id
+            var productId = $(this).find('.product-id').val();
+            if (productId) {
+                var quantity = parseInt($(this).find('td:nth-child(2)').text(), 10);
+                var price = parseFloat($(this).find('td:nth-child(3)').text());
+
+                // Convert productId to UUID format, assuming it's a valid UUID string
+                orderItems.push({ productId: productId, price: price, quantity: quantity });
+            }
+        });
+
+        // Ensure that there's at least one item in the cart
+        if (orderItems.length === 0) {
+            alert('장바구니가 비어 있습니다.');
+            return;
+        }
+
+        var orderRequest = {
+            memberId: $('#memberSelect').val(), // Retrieves the selected member ID
+            orderItems: orderItems
+        };
+
+        $.ajax({
+            url: '/api/v1/orders', // Update this URL to your order creation endpoint
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(orderRequest),
+            success: function(response) {
+                console.log("Order placed successfully", response);
+                alert('주문이 성공적으로 처리되었습니다.');
+                window.location.reload(); // Or redirect to a success page
+            },
+            error: function(xhr, status, error) {
+                alert("주문 처리 중 오류가 발생했습니다: " + error);
+            }
+        });
+    }
+
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+        $('.cart-list tr').each(function() {
+            var priceText = $(this).find('.item-price').text();
+            var quantityText = $(this).find('.item-quantity').text();
+            console.log(priceText);
+            console.log(quantityText);
+
+            // 숫자로 변환하기 전에 텍스트 정제
+            var price = parseInt(priceText.replace(/[^0-9.]/g, ""), 10);
+            var quantity = parseInt(quantityText, 10);
+            console.log(price);
+            console.log(quantity);
+
+            if (!isNaN(price) && !isNaN(quantity)) {
+                totalPrice += (price * quantity);
+            }
+        });
+        console.log(totalPrice);
+        $('#totalPrice').text(totalPrice); // 숫자 형식으로 변환
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 상세</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .member-detail{
+            margin:0 auto;
+        }
+        .member-detail-top{
+            width: 500px;
+            height: 600px;
+            float: left;
+            padding: 50px;
+        }
+        .member-detail-bottom{
+            text-align: center;
+        }
+        .member-detail-table{
+            width: 500px;
+            margin-top: 100px;
+        }
+        .member-detail-table tr{
+            border-bottom: 1px solid #F7F7F7;
+        }
+        .member-detail-table tr td:first-child{
+            width: 150px;
+            padding: 10px;
+        }
+        .cart{
+            float: left;
+        }
+        .cart-price{
+            float: right;
+            width: 280px;
+            background-color: #f7f7f7;
+        }
+        .cart-price div{
+            margin:10px;
+        }
+        .cart-list {
+            width: 800px;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            margin-right: 0px;
+            margin-bottom: 100px;
+        }
+        .cart-list th{
+            padding: 10px;
+            background-color: #f7f7f7;
+        }
+        .cart-list td{
+            padding: 10px;
+        }
+        .cart-list tr{
+            border-bottom: 1px solid #f7f7f7;
+        }
+        .cart-list tr:hover{
+            background-color: #f7f7f7;
+        }
+        .cart-quantity-input{
+            width: 70px;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+
+<div class="content-default">
+    <div class="view-title">
+        <h3>주문 상세</h3>
+    </div>
+    <div class="member-detail">
+        <table class="member-detail-table">
+            <tr>
+                <td>주문자 ID</td>
+                <td id="memberId" th:text="${order.memberId}"></td>
+            </tr>
+            <tr>
+                <td>주문자 이름</td>
+                <td th:text="${order.name}"></td>
+            </tr>
+            <tr>
+                <td>주문자 주소</td>
+                <td th:text="${order.address}"></td>
+            </tr>
+            <tr>
+                <td>주문 ID</td>
+                <td th:text="${order.orderId()}"></td>
+            </tr>
+            <tr>
+                <td>주문 상태</td>
+                <td th:text="${order.orderStatus().name()}"></td>
+            </tr>
+            <tr>
+                <td>생성 시각</td>
+                <td th:text="${order.createdAt}"></td>
+            </tr>
+            <tr>
+                <td>최종 변경 시각</td>
+                <td th:text="${order.updatedAt}"></td>
+            </tr>
+        </table>
+
+            <div class="cart-and-total-container">
+                <div class="cart-container">
+                    <!-- Existing table HTML with Thymeleaf content -->
+                    <table class="cart cart-list">
+                        <tr>
+                            <th style="width:300px">상품 ID</th>
+                            <th style="width:150px">상품 이름</th>
+                            <th style="width:100px">단위당 가격</th>
+                            <th style="width:70px">주문 수량</th>
+                        </tr>
+                        <tr th:each="orderItem : ${order.orderItems()}">
+                            <td th:text="${orderItem.productId()}">Product Name</td>
+                            <td th:text="${orderItem.name}">Product Name</td>
+                            <td th:text="${orderItem.price()}">Quantity</td>
+                            <td th:text="${orderItem.quantity()}">Price</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    <div style="text-align: right">
+        <input type="button" value="목록으로 돌아가기" th:onclick="'location.href=\'' + @{/orders} + '\''" class="button-small"/>
+    </div>
+</div>
+
+
+</body>
+</html>

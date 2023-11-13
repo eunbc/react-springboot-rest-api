@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>신규 상품 등록</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/kurly.css}" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/nav}"></div>
+
+<div class="content-default">
+    <div class="view-title">
+        <h3>신규 상품 등록</h3>
+    </div>
+
+    <form id="productForm" class="admin-content-small mt-4">
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Name <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" placeholder="Name">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="category" class="col-sm-2 col-form-label">Category <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <select class="form-control" id="category">
+                    <option value="MEAT_AND_SEAFOODS">Meat and Seafoods</option>
+                    <option value="BREADS_AND_BAKERY">Breads and Bakery</option>
+                    <option value="FRUITS_AND_VEGETABLES">Fruits and Vegetables</option>
+                    <option value="BEVERAGES">Beverages</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="price" class="col-sm-2 col-form-label">Price <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="price" placeholder="Price">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="stock" class="col-sm-2 col-form-label">Stock <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="stock" placeholder="Stock">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="sales" class="col-sm-2 col-form-label">Sales <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="sales" placeholder="Sales">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="description" class="col-sm-2 col-form-label">Description <span class="necessary">*</span></label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="description" placeholder="Description"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-12 text-center">
+                <button type="submit" class="button-small">등록하기</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#productForm').on('submit', function(e) {
+            e.preventDefault();
+            var formData = {
+                name: $('#name').val(),
+                category: $('#category').val(),
+                price: $('#price').val(),
+                stock: $('#stock').val(),
+                sales: $('#sales').val(),
+                description: $('#description').val()
+            };
+
+            $.ajax({
+                url: '/api/v1/products',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    console.log(response);
+                    window.location.href = '/products';
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("내용을 확인해주세요.");
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
